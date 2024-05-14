@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Office Room Booking</title>
+  <style>
+    /* Your existing CSS styles */
+    /* Style for the captcha */
+    .captcha-container {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    #captcha {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    #refreshCaptcha {
+      margin-left: 10px;
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Room Booking</h2>
+    <form action="/" method="POST">
+      <div class="form-contact">
+        <!-- Your existing form fields -->
+
+        <!-- CAPTCHA container -->
+        <div class="captcha-container">
+          <input type="text" id="captcha" name="captcha" placeholder="Enter the CAPTCHA" required>
+          <button type="button" id="refreshCaptcha" onclick="refreshCaptcha()">Refresh</button>
+        </div>
+
+        <img id="captchaImage" src="" alt="CAPTCHA Image">
+
+        <button type="submit" class="send">Send</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Generate a random alphanumeric string for the CAPTCHA
+    function generateCaptcha() {
+      var length = 6; // Adjust the length of the CAPTCHA as needed
+      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var captcha = '';
+      for (var i = 0; i < length; i++) {
+        captcha += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      return captcha;
+    }
+
+    // Function to refresh CAPTCHA
+    function refreshCaptcha() {
+      var captcha = generateCaptcha();
+      document.getElementById('captcha').value = ''; // Clear the previous input
+      document.getElementById('captchaImage').src = 'https://dummyimage.com/150x50/000/fff&text=' + captcha;
+    }
+
+    // Initialize CAPTCHA on page load
+    window.onload = function () {
+      refreshCaptcha();
+    };
+  </script>
+</body>
+
+</html>

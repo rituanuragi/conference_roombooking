@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Office Room Booking</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-image: url('https://officesnapshots.com/wp-content/uploads/2019/11/booking-com-offices-tourcoing-12-700x525.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-contact {
+      margin-bottom: 20px;
+    }
+
+    .input-box,
+    .message,
+    .department,
+    .timeslot,
+    .purpose,
+    .send {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+
+    .send {
+      background-color: #281ccf;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    .send:hover {
+      background-color: #45a049;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    .time-slot-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .time-slot-container select {
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    .captcha-container {
+      margin-bottom: 20px;
+      display: flex;
+      width: 30px;
+      align-items: center;
+    }
+
+    #captcha {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    #refreshCaptcha {
+      margin-left: 10px;
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+      font-size: 16px;
+    }
+
+    .room {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+
+    .checkout {
+
+      margin-right: 190px;
+    }
+  </style>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Office Room Booking</h2>
+    <form action="/" method="POST">
+      <div class="form-contact">
+        <label for="nameofperson">Full Name:</label>
+        <input type="text" id="nameofperson" class="input-box" name="nameofperson" required
+          placeholder="Enter your full name">
+        <label for="department">Department:</label>
+        <select id="department" class="department" name="department" required>
+          <option value="" selected disabled>Select Department</option>
+          <option value="CREDIT">CREDIT</option>
+          <option value="HR">HR</option>
+          <option value="IT">IT</option>
+          <option value="MARKETING">MARKETING</option>
+          <option value="OPERATIONS">OPERATIONS</option>
+          <option value="PRODUCT">PRODUCT</option>
+          <option value="SALES">SALES</option>
+        </select>
+        <label for="date">Date:</label>
+        <input type="date" id="date" class="timeslot" name="date" required>
+
+        <div class="time-slot-container">
+          <div>
+            <label for="check-in">Check-in Time:</label>
+            <input type="time" id="check-in" class="timeslot" name="checkin" required>
+          </div>
+          <div class="checkout">
+            <label for="check-out">Check-out Time:</label>
+            <input type="time" id="check-out" class="timeslot" name="checkout" required>
+          </div>
+        </div>
+        <label for="purpose">Purpose:</label>
+        <select id="purpose" class="purpose" name="purpose" required>
+          <option value="" selected disabled>Select Purpose</option>
+          <option value="Meeting">Meeting</option>
+          <option value="Interview">Interview</option>
+          <option value="Training">Training</option>
+          <option value="Training">Shooting</option>
+          <option value="Others">if others,write message</option>
+
+        </select>
+        <label for="message">Message:</label>
+        <textarea id="message" class="message" rows="4" name="message" placeholder="Enter your message"></textarea>
+
+        <label for="room">Room Type:</label>
+        <br />
+        <select id="room" class="room" name="room" required>
+          <option value="" selected disabled>Select Room</option>
+          <option value="Conference Room">Conference Room</option>
+          <option value="HR Room">HR Room</option>
+          <option value="Director's Room">Director's Room</option>
+        </select>
+      </div>
+      <button type="submit" class="send">Send</button>
+    </form>
+  </div>
+
+
+</body>
+
+</html>
