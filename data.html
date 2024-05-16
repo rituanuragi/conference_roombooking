@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Room Bookings</title>
+  <style>
+    body {
+      background-image: url('./bg.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .delete-button {
+      background-color: #ff0a0a;
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .update-button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <table id="bookingTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Date</th>
+        <th>Check-in Time</th>
+        <th>Check-out Time</th>
+        <th>Purpose</th>
+        <th>Message</th>
+        <th>Room</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="bookingBody">
+
+    </tbody>
+  </table>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Function to fetch bookings data from the server and render it in the table
+      function fetchAndRenderBookings() {
+        $.get("http://localhost:5500/bookings", function (data) {
+          // Clear existing content
+          $("#bookingBody").empty();
+
+          // Retrieve deleted booking IDs from localStorage
+          var deletedBookingIds = JSON.parse(localStorage.getItem('deletedBookingIds')) || [];
+
+          // Append each booking to the table if it's not deleted
+          data.forEach(function (booking) {
+            if (!deletedBookingIds.includes(booking.id)) {
+              // Retrieve the updated checkout time from local storage
+              var updatedCheckoutTime = localStorage.getItem('checkout_' + booking.id) || booking.checkout;
+
+              $("#bookingBody").append(`
+                        <tr data-id="${booking.id}">
+                            <td>${booking.name}</td>
+                            <td>${booking.department}</td>
+                            <td>${booking.date}</td>
+                            <td>${booking.checkin}</td>
+                            <td>${updatedCheckoutTime}</td>
+                            <td>${booking.purpose}</td>
+                            <td>${booking.message}</td>
+                            <td>${booking.room}</td>
+                            <td>
+                                <button class="update-button">Update</button>
+                                <button class="delete-button">Delete</button>
+                            </td>
+                        </tr>
+                    `);
+            }
+          });
+
+          // Attach click event handler to the "Update" and "Delete" buttons
+          $(".update-button").click(handleUpdateButtonClick);
+          $(".delete-button").click(handleDeleteButtonClick);
+        });
+      }
+
+      // Function to handle the click event of the "Update" button
+      function handleUpdateButtonClick(event) {
+        // Get the corresponding booking ID from the table row
+        var bookingId = $(this).closest('tr').data('id');
+
+        // Get the new checkout time from the user input or any other source
+        var newCheckoutTime = prompt("Update the new checkout time:");
+
+        // Check if the user entered a new checkout time
+        if (newCheckoutTime !== null && newCheckoutTime !== "") {
+          // Call the function to update the checkout time
+          increaseCheckout(bookingId, newCheckoutTime);
+
+          // Save the updated checkout time to local storage
+          localStorage.setItem('checkout_' + bookingId, newCheckoutTime);
+        }
+      }
+
+      // Function to handle the click event of the "Delete" button
+      function handleDeleteButtonClick(event) {
+        // Get the corresponding booking ID from the table row
+        var bookingId = $(this).closest('tr').data('id');
+
+        // Call the function to delete the booking
+        deleteBooking(bookingId);
+
+        // Add the deleted ID to the list of deleted IDs in local storage
+        var deletedBookingIds = JSON.parse(localStorage.getItem('deletedBookingIds')) || [];
+        deletedBookingIds.push(bookingId);
+        localStorage.setItem('deletedBookingIds', JSON.stringify(deletedBookingIds));
+      }
+
+      // Function to update the checkout time in the UI
+      function increaseCheckout(id, newCheckoutTime) {
+        console.log("Checkout time updated for booking with ID: " + id + ". New checkout time: " + newCheckoutTime);
+        $("tr[data-id='" + id + "']").find("td:eq(4)").text(newCheckoutTime);
+      }
+
+      // Function to delete the booking from the UI
+      function deleteBooking(id) {
+        console.log("Booking deleted with ID: " + id);
+        $("tr[data-id='" + id + "']").remove();
+      }
+
+      // Call the function to fetch and render bookings data when the document is ready
+      fetchAndRenderBookings();
+    });
+  </script>
+</body>
+
+</html>

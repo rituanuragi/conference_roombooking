@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background-image: url('https://officesnapshots.com/wp-content/uploads/2019/11/booking-com-offices-tourcoing-12-700x525.jpg');
+      background-image: url('https://media.istockphoto.com/id/1305990690/photo/an-organised-workspace-leads-to-more-productivity.jpg?s=612x612&w=0&k=20&c=bZhhyF1eHKZE4yUC6yJ1jJyLftC2oHrr8QPiKwj7zm4=');
       background-repeat: no-repeat;
       background-size: cover;
       margin: 0;
@@ -110,16 +110,49 @@
 
       margin-right: 190px;
     }
+
+    button {
+      background-color: #45a049;
+      border: none;
+      color: white;
+      margin-right: 20px;
+      margin-bottom: 10px;
+
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+
+      cursor: pointer;
+      border-radius: 5px;
+      transition-duration: 0.4s;
+
+    }
+
+    button:hover {
+      background-color: #357a38;
+    }
+
+    button:active {
+      background-color: #357a38;
+      box-shadow: 0 3px #666;
+      transform: translateY(2px);
+    }
   </style>
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body>
+
+
   <div class="container">
     <h2>Office Room Booking</h2>
+    <a href="./data.html">
+      <button style="background-color:#47b94d">Check Availability</button>
+    </a>
     <form action="/" method="POST">
       <div class="form-contact">
-        <label for="nameofperson">Full Name:</label>
+        <label for="nameofperson">Full Name(Manager):</label>
         <input type="text" id="nameofperson" class="input-box" name="nameofperson" required
           placeholder="Enter your full name">
         <label for="department">Department:</label>

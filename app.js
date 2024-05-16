@@ -143,6 +143,68 @@ app.post("/", function (req, res) {
     }
   );
 });
-app.listen(4500, function () {
-  console.log("Server started on port 4500");
+
+app.get("/bookings", function (req, res) {
+  pool.query("SELECT * FROM room_bookings", function (error, results, fields) {
+    if (error) {
+      console.error("Error fetching data from database:", error);
+      res
+        .status(500)
+        .send("An error occurred while fetching data from database.");
+      return;
+    }
+    res.json(results);
+  });
+});
+
+app.get("/bookings", function (req, res) {
+  pool.query("SELECT * FROM room_bookings", function (error, results, fields) {
+    if (error) {
+      console.error("Error fetching data from database:", error);
+      res
+        .status(500)
+        .send("An error occurred while fetching data from database.");
+      return;
+    }
+    res.json(results);
+  });
+});
+app.put("/bookings/:id", function (req, res) {
+  const bookingId = req.params.id;
+  const { checkout } = req.body;
+
+  pool.query(
+    "UPDATE room_bookings SET checkout = ? WHERE id = ?",
+    [checkout, bookingId],
+    function (error, results, fields) {
+      if (error) {
+        console.error("Error updating checkout time in database:", error);
+        res.status(500).send("An error occurred while updating checkout time.");
+        return;
+      }
+      res.status(200).send("Checkout time updated successfully.");
+    }
+  );
+});
+// DELETE route to delete a booking by ID
+app.delete("/bookings/:id", function (req, res) {
+  const bookingId = req.params.id;
+
+  // Delete the booking from the database
+  pool.query(
+    "DELETE FROM room_bookings WHERE id = ?",
+    [bookingId],
+    function (error, results, fields) {
+      if (error) {
+        console.error("Error deleting booking from database:", error);
+        res.status(500).send("An error occurred while deleting booking.");
+        return;
+      }
+      res.status(200).send("Booking deleted successfully.");
+    }
+  );
+});
+
+app.listen(5500, function () {
+  console.log("Server started on port 5500");
 });
