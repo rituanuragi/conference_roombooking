@@ -2,6 +2,7 @@ const express = require("express");
 const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
+const moment = require("moment"); // Import moment.js for date formatting
 
 const app = express();
 
@@ -30,7 +31,7 @@ pool.query(
       console.error("Error creating table:", error);
       return;
     }
-    console.log("Table room_booking created or already exists.");
+    console.log("Table room_bookings created or already exists.");
   }
 );
 
@@ -109,6 +110,7 @@ app.post("/", function (req, res) {
 
   const formattedCheckin = formatTime(checkin);
   const formattedCheckout = formatTime(checkout);
+  const formattedDate = moment().format("YYYY-MM-DD"); // Format the date correctly
 
   // Room is available, proceed with booking
   pool.query(
@@ -116,7 +118,7 @@ app.post("/", function (req, res) {
     [
       na,
       department,
-      new Date(),
+      formattedDate,
       formattedCheckin,
       formattedCheckout,
       purpose,
@@ -153,22 +155,14 @@ app.get("/bookings", function (req, res) {
         .send("An error occurred while fetching data from database.");
       return;
     }
+    // Format dates before sending to frontend
+    results.forEach((booking) => {
+      booking.date = moment(booking.date).format("YYYY-MM-DD");
+    });
     res.json(results);
   });
 });
 
-app.get("/bookings", function (req, res) {
-  pool.query("SELECT * FROM room_bookings", function (error, results, fields) {
-    if (error) {
-      console.error("Error fetching data from database:", error);
-      res
-        .status(500)
-        .send("An error occurred while fetching data from database.");
-      return;
-    }
-    res.json(results);
-  });
-});
 app.put("/bookings/:id", function (req, res) {
   const bookingId = req.params.id;
   const { checkout } = req.body;
@@ -186,7 +180,7 @@ app.put("/bookings/:id", function (req, res) {
     }
   );
 });
-// DELETE route to delete a booking by ID
+
 app.delete("/bookings/:id", function (req, res) {
   const bookingId = req.params.id;
 
